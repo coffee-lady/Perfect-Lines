@@ -1,16 +1,86 @@
 [bootstrap]
-main_collection = /main/main.collectionc
+main_collection = /src/ui/scenes/bootstrap/bootstrap.collectionc
+render = /rendercam/rendercam.renderc
 
 [script]
 shared_state = 1
 
 [display]
-width = 960
-height = 640
+width = 640
+height = 1136
+update_frequency = 60
+samples = 2
+high_dpi = 1
 
 [android]
 input_method = HiddenInputField
 
 [project]
 title = Perfect Lines
+bundle_resources = src/bootstrap/yandex
+custom_resources = /resources
+version = 0.1.0
+dependencies#0 = https://github.com/AGulev/jstodef/archive/master.zip
+dependencies#1 = https://github.com/d954mas/defold-utf8/archive/master.zip
+dependencies#2 = https://github.com/britzl/defold-richtext/archive/master.zip
+dependencies#3 = https://github.com/rgrams/rendercam/archive/v1.0.1.zip
+dependencies#4 = https://github.com/indiesoftby/defold-yagames/archive/master.zip
+dependencies#5 = https://github.com/DanEngelbrecht/LuaScriptInstance/archive/0.1.1.zip
+
+[input]
+game_binding = /settings/input/game.input_bindingc
+gamepads = /builtins/input/default.gamepadsc
+
+[gui]
+max_count = 1
+max_particle_count = 200
+max_particlefx_count = 3
+
+[label]
+max_count = 0
+
+[sprite]
+max_count = 200
+
+[html5]
+htmlfile = /src/bootstrap/yandex/template_yandex.html
+show_made_with_defold = 0
+
+[collection_proxy]
+max_count = 30
+
+[yagames]
+sdk_init_options = { orientation: { value: "portrait", lock: true } }
+service_worker_url = sw.js
+manifest_url = yandex-manifest.json
+
+[native_extension]
+app_manifest = /settings/manifests/manifest.appmanifest
+
+[particle_fx]
+max_count = 1024
+
+[spine]
+max_count = 0
+
+[model]
+max_count = 0
+
+[mesh]
+max_count = 0
+
+[collectionfactory]
+max_count = 0
+
+[factory]
+max_count = 3
+
+[physics]
+ray_cast_limit_3d = 0
+gravity_y = 0.0
+scale = 0.01
+allow_dynamic_transforms = 1
+
+[graphics]
+max_draw_calls = 20
 

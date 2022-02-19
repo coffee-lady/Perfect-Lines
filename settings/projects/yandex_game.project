@@ -1,0 +1,87 @@
+[bootstrap]
+main_collection = /main/app/scenes/bootstrap/yandex/yandex_bootstrap.collectionc
+render = /rendercam/rendercam.renderc
+
+[script]
+shared_state = 1
+
+[display]
+width = 640
+height = 1136
+update_frequency = 60
+samples = 2
+
+[android]
+input_method = HiddenInputField
+
+[project]
+title = Sudoku Instant
+bundle_resources = main/build_resource/bundle_resources/yandex
+custom_resources = /main/resources
+version = 1.5.89
+dependencies#0 = https://github.com/AGulev/jstodef/archive/master.zip
+dependencies#1 = https://github.com/d954mas/defold-utf8/archive/master.zip
+dependencies#2 = https://github.com/britzl/defold-richtext/archive/master.zip
+dependencies#3 = https://github.com/AGulev/set_screen_position/archive/master.zip
+dependencies#4 = https://github.com/rgrams/rendercam/archive/v1.0.1.zip
+dependencies#5 = https://github.com/britzl/defold-screenshot/archive/master.zip
+
+[input]
+game_binding = /main/app/scenes/input/game.input_bindingc
+gamepads = /builtins/input/default.gamepadsc
+
+[gui]
+max_count = 150
+
+[label]
+max_count = 0
+
+[sprite]
+max_count = 1
+
+[html5]
+htmlfile = /main/build_resource/manifests/web/template_yandex.html
+show_made_with_defold = 0
+
+[graphics]
+texture_profiles = /main/build_resource/texture_profile/compact_textures.texture_profiles
+
+[collection_proxy]
+max_count = 30
+
+[yagames]
+sdk_init_options = { orientation: { value: "portrait", lock: true } }
+service_worker_url = sw.js
+manifest_url = yandex-manifest.json
+
+[native_extension]
+app_manifest = /main/build_resource/native_manifest/native_manifest_strip.appmanifest
+
+[particle_fx]
+max_count = 128
+
+[spine]
+max_count = 1
+
+[model]
+max_count = 1
+
+[mesh]
+max_count = 1
+
+[collectionfactory]
+max_count = 1
+
+[factory]
+max_count = 1
+
+[physics]
+world_count = 1
+trigger_overlap_capacity = 0
+ray_cast_limit_3d = 0
+ray_cast_limit_2d = 0
+max_contacts = 0
+max_collisions = 0
+debug_alpha = 0.0
+debug_scale = 0.0
+

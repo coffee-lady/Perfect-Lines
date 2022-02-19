@@ -1,0 +1,17 @@
+{
+
+    "platforms": {
+        "ok": {
+            "file_replace": [{
+                "project_file": "game.project",
+                "platform_file": "./main/app/settings/ok/ok_game.project_settings"
+            }]
+        },
+        "yandex": {
+            "file_replace": [{
+                "project_file": "game.project",
+                "platform_file": "./main/app/settings/yandex/yandex_game.project_settings"
+            }]
+        }
+    }
+}

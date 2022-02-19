@@ -1,0 +1,49 @@
+{
+    "icons": [
+        {
+            "src": "icon/icon_48x48.png",
+            "sizes": "48x48",
+            "type": "image/png"
+        },
+        {
+            "src": "icon/icon_96x96.png",
+            "sizes": "96x96",
+            "type": "image/png"
+        },
+        {
+            "src": "icon/icon_144x144.png",
+            "sizes": "144x144",
+            "type": "image/png"
+        },
+        {
+            "src": "icon/icon_192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        }
+    ],
+    "yandex": {
+        "splash_screen_color": "#FFFFFF",
+        "cache": {
+            "resources": [
+                "images/icon.svg",
+                "images/logo.svg",
+                "scripts/loading.js",
+                "scripts/sessionsHelper.js",
+                "scripts/wrapper.js",
+                "styles/css/loadingScreen.css",
+                "styles/css/style.css",
+                "styles/fonts/RobotoBold.ttf",
+                "index.html",
+                "dmloader.js",
+                "sw.js",
+                "archive/archive_files.json",
+                "archive/game.arcd0",
+                "archive/game.arci0",
+                "archive/game.dmanifest0",
+                "archive/game.projectc0",
+                "archive/game.public.der0",
+                "https://yandex.ru/games/sdk/v2"
+            ]
+        }
+    }
+}

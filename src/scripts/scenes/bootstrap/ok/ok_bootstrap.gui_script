@@ -1,0 +1,30 @@
+local App = require('src.app')
+local AppInstaller = require('src.scripts.app_installer.ok_installer')
+local BootstrapGUI = require('src.scripts.scenes.bootstrap.bootstrap_gui')
+
+local ScriptWrapper = App.libs.ScriptWrapper
+
+local Scene = class('Scene', ScriptWrapper)
+
+function Scene:initialize()
+    self:register()
+end
+
+function Scene:init()
+    AppInstaller:install_services()
+    BootstrapGUI:init(AppInstaller)
+end
+
+function Scene:update(dt)
+    BootstrapGUI:update(dt)
+end
+
+function Scene:on_message(message_id, message)
+    BootstrapGUI:on_message(message_id, message)
+end
+
+function Scene:final()
+    BootstrapGUI:final()
+end
+
+Scene()

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, minimal-ui, shrink-to-fit=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <link rel="stylesheet" href="styles/css/style.css">
+    <script src="scripts/loading.js"></script>
+    <script src="scripts/design.js"></script>
+    <script src="scripts/sessionsHelper.js"></script>
+    <script src="scripts/localization.js"></script>
+    <title>{{project.title}}</title>
+</head>
+
+<body>
+    <div class="square" id="square"></div>
+    <div class="container">
+        <div class="squares"></div>
+        <div id="app-container" class="canvas-app-container">
+            <canvas id="canvas" class="canvas-app-canvas" tabindex="1" width="{{display.width}}" height="{{display.height}}"></canvas>
+            <div class="loading_container" id="loading_container">
+                <img class="loading__logo" src="images/logo.svg">
+
+                <div class="loading__icon_container">
+                    <div class="loading__icon_circle">
+                    </div>
+                    <img class="loading__icon" src="images/icon.svg">
+                </div>
+
+                <div class="loading__title">Судоку Мастер</div>
+
+                <div class="loading__progressbar_container">
+                    <div class="loading__progressbar" id="progressbar"></div>
+                    <span class="loading__progressbar__text">
+                        Загрузка&nbsp;
+                    </span>
+                    <span>&nbsp;</span>
+                    <span class="loading__progressbar__text" id="progressText">0%</span>
+                </div>
+            </div>
+
+            <div class="banner_close_button">
+                <img src="images/banner_close.png">
+            </div>
+        </div>
+        <div class="squares"></div>
+    </div>
+
+    <script id='engine-loader' type='text/javascript' src='dmloader.js'></script>
+    <script id='engine-setup' type='text/javascript'>
+        const CLOSE_BANNER = 'close_banner';
+        const ONLINE = 'online';
+        const OFFLINE = 'offline';
+        const SAVE_DATA = 'save_data';
+        const GET_LOADING_TIME = 'get_loading_time';
+        let TIME_ENDED;
+        const TIME_STARTED = performance.now();
+        const loadingAnimator = new LoadingAnimator();
+        const designHelper = new DesignHelper();
+        const localizationHelper = new LocalizationHelper();
+        designHelper.changeTheme();
+        localizationHelper.changeLang();
+
+        loadingAnimator.startAnimation();
+
+        const getEngineParams = new Function("return [{{#DEFOLD_ENGINE_ARGUMENTS}}'{{.}}', {{/DEFOLD_ENGINE_ARGUMENTS}}]")
+
+        const extra_params = {
+            archive_location_filter: function(path) {
+                return ("{{DEFOLD_ARCHIVE_LOCATION_PREFIX}}" + path + "{{DEFOLD_ARCHIVE_LOCATION_SUFFIX}}");
+            },
+            engine_arguments: getEngineParams(),
+            custom_heap_size: parseInt("{{DEFOLD_HEAP_SIZE}}"),
+            full_screen_container: "#canvas-container",
+            disable_context_menu: true
+        }
+
+        Module['INITIAL_MEMORY'] = extra_params.custom_heap_size;
+
+        Module['onRuntimeInitialized'] = function() {
+            Module.runApp("canvas", extra_params);
+        };
+
+        Module["locateFile"] = function(path, scriptDirectory) {
+            if (path == "dmengine.wasm" || path == "dmengine_release.wasm" || path == "dmengine_headless.wasm") {
+                path = "{{exe-name}}.wasm";
+            }
+            return scriptDirectory + path;
+        };
+
+        const is_iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+        function resize_game_canvas() {
+            if (is_iOS) {
+                window.scrollTo(0, 0);
+            }
+
+            const app_container = document.getElementById('app-container');
+            const game_canvas = document.getElementById('canvas');
+            const dpi = window.devicePixelRatio || 1;
+
+            const innerWidth = window.innerWidth;
+            const innerHeight = window.innerHeight;
+            let width = parseInt('{{display.width}}');
+            let height = parseInt('{{display.height}}');
+            const actualRatio = innerWidth / innerHeight;
+
+            const portrait_aspect = 3 / 4;
+            const is_portrait = actualRatio <= portrait_aspect;
+
+            if (is_portrait) {
+                width = innerWidth;
+                height = innerHeight;
+            }
+
+            const targetRatio = width / height;
+
+            if (actualRatio >= targetRatio) {
+                width = innerHeight * targetRatio;
+                height = innerHeight;
+            } else {
+                width = innerWidth;
+                height = innerWidth / targetRatio;
+            }
+
+            app_container.style.width = width + "px";
+            app_container.style.height = height + "px";
+            game_canvas.width = width * dpi;
+            game_canvas.height = height * dpi;
+        }
+
+        resize_game_canvas();
+
+        window.addEventListener('resize', resize_game_canvas, false);
+        window.addEventListener('orientationchange', resize_game_canvas, false);
+
+        function loadGame() {
+            TIME_ENDED = performance.now();
+
+            initSessionsHelper();
+            onServicesInitialized();
+            loadingAnimator.loadGame();
+        }
+
+        function initSessionsHelper() {
+            const sessionsHelper = new SessionsHelper();
+
+            sessionsHelper.changeSessions(1);
+
+            window.addEventListener('unload', () => {
+                sessionsHelper.changeSessions(-1);
+            });
+
+            window.addEventListener('storage', () => {
+                sessionsHelper.checkSessions();
+            });
+        }
+
+        function onServicesInitialized() {
+            JsToDef.send(navigator.onLine ? ONLINE : OFFLINE);
+            JsToDef.send(GET_LOADING_TIME, { time: TIME_ENDED - TIME_STARTED });
+        }
+
+        const appContainer = document.getElementById('app-container');
+
+        function setBanner() {
+            const banner = document.querySelector('.banner');
+
+            if (!banner) {
+                return;
+            }
+
+            appContainer.appendChild(banner);
+        }
+
+        function setBannerScale() {
+            const banner = document.querySelector('.banner');
+
+            if (!banner) {
+                return;
+            }
+
+            const displayBannerHeight = 120;
+            const heightRatio = appContainer.clientHeight / parseInt('{{display.height}}');
+            const widthRatio = appContainer.clientWidth / parseInt('{{display.width}}');
+            const scale = (heightRatio < widthRatio) ? heightRatio : widthRatio;
+            const display = banner.style.display;
+            const height = displayBannerHeight * heightRatio;
+
+            banner.setAttribute('style', `height: ${height}px; width:${appContainer.clientWidth}px; transform-origin: bottom; display: ${display};`);
+        }
+
+        function showBanner() {
+            const banner = document.querySelector('.banner');
+
+            const button_close = document.querySelector('.banner_close_button');
+            button_close.style.display = 'flex';
+            button_close.style.bottom = banner.clientHeight + 'px';
+        }
+
+        function hideBanner() {
+            const button_close = document.querySelector('.banner_close_button');
+            button_close.style.display = 'none';
+        }
+
+        function getCanvasWidth() {
+            return appContainer.clientWidth;
+        }
+
+        function getCanvasHeight() {
+            return appContainer.clientHeight;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            setBannerScale();
+        });
+
+        window.addEventListener('resize', () => {
+            setBannerScale();
+        });
+
+        window.addEventListener('online', () => {
+            if (JsToDef) {
+                JsToDef.send(ONLINE);
+            }
+        });
+
+        window.addEventListener('offline', () => {
+            if (JsToDef) {
+                JsToDef.send(OFFLINE);
+            }
+        });
+
+        window.addEventListener('blur', () => {
+            if (JsToDef) {
+                JsToDef.send(SAVE_DATA);
+            }
+        });
+
+        function changeTheme(themeKey, isSaved) {
+            designHelper.changeTheme(themeKey, isSaved);
+        }
+
+        const button_close = document.querySelector('.banner_close_button');
+        button_close.addEventListener('click', () => {
+            if (JsToDef) {
+                JsToDef.send(CLOSE_BANNER);
+            }
+        })
+
+        function changeLang(lang) {
+            localizationHelper.changeLang(lang);
+        }
+    </script>
+
+    <script id='engine-start' type='text/javascript'>
+        EngineLoader.load("canvas", "{{exe-name}}");
+    </script>
+
+    <script src="./scripts/wrapper.js"></script>
+
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript">
+        (function(m, e, t, r, i, k, a) {
+            m[i] = m[i] || function() {
+                (m[i].a = m[i].a || []).push(arguments)
+            };
+            m[i].l = 1 * new Date();
+            k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a)
+        })
+        (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+        ym(71514256, "init", {
+            clickmap: true,
+            trackLinks: true,
+            accurateTrackBounce: true
+        });
+    </script>
+    <noscript>
+        <div><img src="https://mc.yandex.ru/watch/71514256" style="position:absolute; left:-9999px;" alt="" /></div>
+    </noscript>
+    <!-- /Yandex.Metrika counter -->
+</body>
+
+</html>

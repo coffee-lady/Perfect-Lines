@@ -1,0 +1,25 @@
+local App = require('src.app')
+local AppInstaller = require('src.scripts.app_installer.ok_installer')
+local BootstrapGO = require('src.scripts.scenes.bootstrap.bootstrap_go')
+
+local ScriptWrapper = App.libs.ScriptWrapper
+
+local Scene = class('Scene', ScriptWrapper)
+
+function Scene:initialize()
+    self:register()
+end
+
+function Scene:init()
+    BootstrapGO:init(AppInstaller)
+end
+
+function Scene:update(dt)
+    BootstrapGO:update(dt)
+end
+
+function Scene:on_message(message_id, message)
+    BootstrapGO:on_message(message_id, message)
+end
+
+Scene()

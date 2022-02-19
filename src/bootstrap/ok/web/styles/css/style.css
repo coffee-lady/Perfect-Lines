@@ -1,0 +1,92 @@
+@import url('./loadingScreen.css');
+
+body {
+    position: fixed;
+    margin: 0;
+    padding: 0;
+    background: #E9E9E9;
+}
+
+.container {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+    box-sizing: border-box;
+}
+
+.squares {
+    position: relative;
+    box-sizing: border-box;
+}
+
+.square {
+    position: absolute;
+    display: none;
+}
+
+.canvas-app-container {
+    position: relative;
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.7);
+}
+
+.canvas-app-container:-webkit-full-screen {
+    width: auto;
+    height: auto;
+}
+
+#canvas {
+    display: none;
+    outline: none;
+    border: 0;
+    width: 100%;
+    height: 100%;
+    vertical-align: bottom;
+}
+
+canvas:focus, canvas:active {
+    outline: none;
+    border: 0;
+    outline-style: none;
+    -moz-outline-style: none;
+}
+
+div {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.banner {
+    position: absolute;
+    bottom: 0;
+}
+
+.banner_close_button {
+    position: absolute;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    width: 4vh;
+    height: 4vh;
+    bottom: 120px;
+    left: 0;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 0px 10px 0px 0px;
+}
+
+.banner_close_button img {
+    width: 2vh;
+    height: 2vh;
+}

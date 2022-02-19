@@ -1,0 +1,56 @@
+local App = require('src.app')
+local AppInstaller = require('src.scripts.app_installer.yandex_installer')
+local Bootstrap = require('src.scripts.scenes.bootstrap.bootstrap_gui')
+
+local ScriptWrapper = App.libs.ScriptWrapper
+local Luject = App.libs.luject
+local Async = App.libs.async
+
+local Scene = class('Scene', ScriptWrapper)
+
+function Scene:initialize()
+    self:register()
+end
+
+function Scene:init()
+    self.messages_queue = {}
+
+    AppInstaller:install()
+
+    Async.bootstrap(
+        function()
+            self.bootstrap = Luject:resolve_class(Bootstrap)
+            self:_resolve_messages()
+        end
+    )
+end
+
+function Scene:_resolve_messages()
+    for i = 1, #self.messages_queue do
+        local msg_data = self.messages_queue[i]
+
+        self.bootstrap:on_message(msg_data.message_id, msg_data.message)
+    end
+end
+
+function Scene:update(dt)
+    if self.bootstrap then
+        self.bootstrap:update(dt)
+    end
+end
+
+function Scene:on_message(message_id, message)
+    if self.bootstrap then
+        self.bootstrap:on_message(message_id, message)
+    else
+        table.insert(self.messages_queue, {message_id = message_id, message = message})
+    end
+end
+
+function Scene:final()
+    if self.bootstrap then
+        self.bootstrap:final()
+    end
+end
+
+Scene()
