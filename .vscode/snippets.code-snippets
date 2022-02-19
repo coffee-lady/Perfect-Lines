@@ -1,0 +1,108 @@
+{
+    "Require app": {
+        "scope": "lua",
+        "prefix": "app",
+        "body": [
+            "local App = require('main.app')\n"
+        ]
+    },
+    "Require game ID": {
+        "scope": "lua",
+        "prefix": "ID",
+        "body": [
+            "local ID = App.constants.gui\n"
+        ]
+    },
+    "Require URL": {
+        "scope": "lua",
+        "prefix": "URL",
+        "body": [
+            "local URL = App.constants.urls\n"
+        ]
+    },
+    "Require MSG": {
+        "scope": "lua",
+        "prefix": "msg",
+        "body": [
+            "local MSG = App.constants.msg\n"
+        ]
+    },
+    "GUI library": {
+        "scope": "lua",
+        "prefix": "guilib",
+        "body": [
+            "local GUILib = App.libs.gui",
+            "local BoxObject = GUILib.box_object",
+            "local TextObject = GUILib.text_object",
+            "local ExtendedObject = GUILib.extended_object",
+            "local StaticExtendedObject = GUILib.static_extended_object",
+            "local ButtonsMenu = GUILib.buttons_menu",
+            "local LinksMenu = GUILib.links_menu",
+        ]
+    },
+    "New class": {
+        "scope": "lua",
+        "prefix": "class",
+        "body": [
+            "local App = require('main.app')",
+            "local class = App.libs.middleclass\n",
+            "--- @class Class",
+            "local Class = class('Class')\n",
+            "function Class:initialize()\n",
+            "end\n",
+            "return Class"
+        ]
+    },
+    "Create module file": {
+        "scope": "lua",
+        "prefix": "mod",
+        "body": [
+            "local M = {}\n",
+            "return M"
+        ]
+    },
+    "Add lib SubscriptionsMap": {
+        "scope": "lua",
+        "prefix": "insubs",
+        "body": [
+            "local SubscriptionsMap = App.libs.SubscriptionsMap",
+        ]
+    },
+    "SubscriptionsMap": {
+        "scope": "lua",
+        "prefix": "subs",
+        "body": [
+            "SubscriptionsMap(self, self.event_bus, {\n",
+            "})",
+        ]
+    },
+    "+ SubscriptionsMap": {
+        "scope": "lua",
+        "prefix": "insubs",
+        "body": [
+            "local SubscriptionsMap = App.libs.SubscriptionsMap\n",
+        ]
+    },
+    "_set_subscriptions": {
+        "scope": "lua",
+        "prefix": "_set_subs",
+        "body": [
+            "_set_subscriptions",
+        ]
+    },
+    "function declaration": {
+        "scope": "lua",
+        "prefix": "fun",
+        "body": [
+            "function M:foo()\n",
+            "end"
+        ]
+    },
+    "local Async = App.libs.async": {
+        "scope": "lua",
+        "prefix": "inasync",
+        "body": [
+            "local Async = App.libs.async",
+        ]
+    },
+}
