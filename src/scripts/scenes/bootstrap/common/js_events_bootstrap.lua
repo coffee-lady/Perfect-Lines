@@ -7,22 +7,18 @@ local SubscriptionsMap = App.libs.SubscriptionsMap
 
 local JSEventsBootstrap = class('JSEventsBootstrap')
 
-JSEventsBootstrap.__cparams = {'event_bus_gui'}
+JSEventsBootstrap.__cparams = {'event_bus'}
 
 function JSEventsBootstrap:initialize(event_bus)
     self.event_bus = event_bus
 
-    SubscriptionsMap(
-        self,
-        self.event_bus,
-        {
-            [MSG.js.save_data] = self.on_save_data,
-            [MSG.js.resize] = self.on_window_resize,
-            [MSG.js.online] = self.on_online,
-            [MSG.js.offline] = self.on_offline,
-            [MSG.js.several_tabs_warning] = self.on_tabs_warning
-        }
-    )
+    SubscriptionsMap(self, self.event_bus, {
+        [MSG.js.save_data] = self.on_save_data,
+        [MSG.js.resize] = self.on_window_resize,
+        [MSG.js.online] = self.on_online,
+        [MSG.js.offline] = self.on_offline,
+        [MSG.js.several_tabs_warning] = self.on_tabs_warning,
+    })
 end
 
 function JSEventsBootstrap:on_save_data()

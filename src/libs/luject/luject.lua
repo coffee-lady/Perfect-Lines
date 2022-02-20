@@ -36,4 +36,14 @@ function Luject:clear_container()
     binding_container:clear_container()
 end
 
+if _G then
+    _G.DI = Luject
+    _G.inject = function(class, ...)
+        return Luject:resolve_class(class, ...)
+    end
+    _G.resolve = function(class, ...)
+        return Luject:resolve(class, ...)
+    end
+end
+
 return Luject

@@ -1,0 +1,17 @@
+local App = require('src.app')
+
+local StrategizedSceneGUI = App.libs.scenes.StrategizedSceneGUI
+
+local RENDER_ORDER = App.config.render_order.game_scene
+local URL = App.constants.urls
+
+local Scene = class('GameSceneGUI', StrategizedSceneGUI)
+
+Scene.__cparams = {'event_bus', 'scenes_strategies_service', 'scenes_service'}
+
+function Scene:initialize(event_bus, scenes_strategies_service, scenes_service)
+    StrategizedSceneGUI.initialize(self, event_bus, scenes_strategies_service, scenes_service, URL.game_scene,
+                                   RENDER_ORDER)
+end
+
+inject(Scene)

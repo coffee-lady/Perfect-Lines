@@ -1,12 +1,12 @@
 ------------
 -- Module --
 ------------
-
 -- standard libraries used
 local debug, io, math, os, string, table = debug, io, math, os, string, table
 
 -- required core global functions
-local assert, error, ipairs, pairs, pcall, print, setmetatable, tonumber = assert, error, ipairs, pairs, pcall, print, setmetatable, tonumber
+local assert, error, ipairs, pairs, pcall, print, setmetatable, tonumber = assert, error, ipairs, pairs, pcall, print,
+                                                                           setmetatable, tonumber
 local fmt, tostring, type = string.format, tostring, type
 local unpack = table.unpack or unpack
 local getmetatable, rawget, setmetatable, xpcall = getmetatable, rawget, setmetatable, xpcall
@@ -14,11 +14,11 @@ local exit, next, require = os.exit, next, require
 
 -- Get containing env, using 5.1's getfenv or emulating it in 5.2
 local getenv = getfenv or function(level)
-        local info = debug.getinfo(level or 2)
-        local n, v = debug.getupvalue(info.func, 1)
-        assert(n == '_ENV', n)
-        return v
-    end
+    local info = debug.getinfo(level or 2)
+    local n, v = debug.getupvalue(info.func, 1)
+    assert(n == '_ENV', n)
+    return v
+end
 
 ---Use lhf's random, if available. It provides an RNG with better
 -- statistical properties, and it gives consistent values across OSs.
@@ -30,11 +30,12 @@ local debug = pcall(require, 'debug') and package.loaded.debug or debug
 
 -- Use luasocket's gettime(), luaposix' gettimeofday(), or os.time for
 -- timestamps
-local now = pcall(require, 'socket') and package.loaded.socket.gettime or pcall(require, 'posix') and package.loaded.posix.gettimeofday and function()
-            local t = package.loaded.posix.gettimeofday()
-            local s, us = t.sec, t.usec
-            return s + us / 1000000
-        end or os.time
+local now = pcall(require, 'socket') and package.loaded.socket.gettime or pcall(require, 'posix') and
+                package.loaded.posix.gettimeofday and function()
+    local t = package.loaded.posix.gettimeofday()
+    local s, us = t.sec, t.usec
+    return s + us / 1000000
+end or os.time
 
 -- Check command line arguments:
 -- -v / --verbose, default to verbose_hooks.
@@ -115,7 +116,8 @@ function RFail:type()
     return 'fail'
 end
 function RFail:tostring(name)
-    return fmt('FAIL: %s%s: %s%s%s', name or '(unknown)', msec(self.elapsed), self.reason or '', self.msg and (' - ' .. tostring(self.msg)) or '', self.line and (' (%d)'):format(self.line) or '')
+    return fmt('FAIL: %s%s: %s%s%s', name or '(unknown)', msec(self.elapsed), self.reason or '',
+               self.msg and (' - ' .. tostring(self.msg)) or '', self.line and (' (%d)'):format(self.line) or '')
 end
 
 local RSkip = {}
@@ -214,12 +216,12 @@ function lunatest.assert_false(got, msg)
     wraptest(not got, msg, {reason = fmt('Expected false, got %s', TS(got))})
 end
 
---got == nil
+-- got == nil
 function lunatest.assert_nil(got, msg)
     wraptest(got == nil, msg, {reason = fmt('Expected nil, got %s', TS(got))})
 end
 
---got ~= nil
+-- got ~= nil
 function lunatest.assert_not_nil(got, msg)
     wraptest(got ~= nil, msg, {reason = fmt('Expected non-nil value, got %s', TS(got))})
 end
@@ -240,13 +242,8 @@ end
 function lunatest.assert_equal(exp, got, tol, msg)
     tol, msg = tol_or_msg(tol, msg)
     if type(exp) == 'number' and type(got) == 'number' then
-        wraptest(
-            math.abs(exp - got) <= tol,
-            msg,
-            {
-                reason = fmt('Expected %s +/- %s, got %s', TS(exp), TS(tol), TS(got))
-            }
-        )
+        wraptest(math.abs(exp - got) <= tol, msg,
+                 {reason = fmt('Expected %s +/- %s, got %s', TS(exp), TS(tol), TS(got))})
     else
         wraptest(exp == got, msg, {reason = fmt('Expected %q, got %q', TS(exp), TS(got))})
     end
@@ -259,57 +256,27 @@ end
 
 ---val > lim.
 function lunatest.assert_gt(lim, val, msg)
-    wraptest(
-        val > lim,
-        msg,
-        {
-            reason = fmt('Expected a value > %s, got %s', TS(lim), TS(val))
-        }
-    )
+    wraptest(val > lim, msg, {reason = fmt('Expected a value > %s, got %s', TS(lim), TS(val))})
 end
 
 ---val >= lim.
 function lunatest.assert_gte(lim, val, msg)
-    wraptest(
-        val >= lim,
-        msg,
-        {
-            reason = fmt('Expected a value >= %s, got %s', TS(lim), TS(val))
-        }
-    )
+    wraptest(val >= lim, msg, {reason = fmt('Expected a value >= %s, got %s', TS(lim), TS(val))})
 end
 
 ---val < lim.
 function lunatest.assert_lt(lim, val, msg)
-    wraptest(
-        val < lim,
-        msg,
-        {
-            reason = fmt('Expected a value < %s, got %s', TS(lim), TS(val))
-        }
-    )
+    wraptest(val < lim, msg, {reason = fmt('Expected a value < %s, got %s', TS(lim), TS(val))})
 end
 
 ---val <= lim.
 function lunatest.assert_lte(lim, val, msg)
-    wraptest(
-        val <= lim,
-        msg,
-        {
-            reason = fmt('Expected a value <= %s, got %s', TS(lim), TS(val))
-        }
-    )
+    wraptest(val <= lim, msg, {reason = fmt('Expected a value <= %s, got %s', TS(lim), TS(val))})
 end
 
 ---#val == len.
 function lunatest.assert_len(len, val, msg)
-    wraptest(
-        #val == len,
-        msg,
-        {
-            reason = fmt('Expected #val == %d, was %d', len, #val)
-        }
-    )
+    wraptest(#val == len, msg, {reason = fmt('Expected #val == %d, was %d', len, #val)})
 end
 
 ---#val ~= len.
@@ -320,13 +287,9 @@ end
 ---Test that the string s matches the pattern exp.
 function lunatest.assert_match(pat, s, msg)
     s = tostring(s)
-    wraptest(
-        type(s) == 'string' and s:match(pat),
-        msg,
-        {
-            reason = fmt('Expected string to match pattern %s, was %s', pat, (s:len() > 30 and (s:sub(1, 30) .. '...') or s))
-        }
-    )
+    wraptest(type(s) == 'string' and s:match(pat), msg, {
+        reason = fmt('Expected string to match pattern %s, was %s', pat, (s:len() > 30 and (s:sub(1, 30) .. '...') or s)),
+    })
 end
 
 ---Test that the string s doesn't match the pattern exp.
@@ -336,195 +299,91 @@ end
 
 ---Test that val is a boolean.
 function lunatest.assert_boolean(val, msg)
-    wraptest(
-        type(val) == 'boolean',
-        msg,
-        {
-            reason = fmt('Expected type boolean but got %s', type(val))
-        }
-    )
+    wraptest(type(val) == 'boolean', msg, {reason = fmt('Expected type boolean but got %s', type(val))})
 end
 
 ---Test that val is not a boolean.
 function lunatest.assert_not_boolean(val, msg)
-    wraptest(
-        type(val) ~= 'boolean',
-        msg,
-        {
-            reason = fmt('Expected type other than boolean but got %s', type(val))
-        }
-    )
+    wraptest(type(val) ~= 'boolean', msg, {reason = fmt('Expected type other than boolean but got %s', type(val))})
 end
 
 ---Test that val is a number.
 function lunatest.assert_number(val, msg)
-    wraptest(
-        type(val) == 'number',
-        msg,
-        {
-            reason = fmt('Expected type number but got %s', type(val))
-        }
-    )
+    wraptest(type(val) == 'number', msg, {reason = fmt('Expected type number but got %s', type(val))})
 end
 
 ---Test that val is not a number.
 function lunatest.assert_not_number(val, msg)
-    wraptest(
-        type(val) ~= 'number',
-        msg,
-        {
-            reason = fmt('Expected type other than number but got %s', type(val))
-        }
-    )
+    wraptest(type(val) ~= 'number', msg, {reason = fmt('Expected type other than number but got %s', type(val))})
 end
 
 ---Test that val is a string.
 function lunatest.assert_string(val, msg)
-    wraptest(
-        type(val) == 'string',
-        msg,
-        {
-            reason = fmt('Expected type string but got %s', type(val))
-        }
-    )
+    wraptest(type(val) == 'string', msg, {reason = fmt('Expected type string but got %s', type(val))})
 end
 
 ---Test that val is not a string.
 function lunatest.assert_not_string(val, msg)
-    wraptest(
-        type(val) ~= 'string',
-        msg,
-        {
-            reason = fmt('Expected type other than string but got %s', type(val))
-        }
-    )
+    wraptest(type(val) ~= 'string', msg, {reason = fmt('Expected type other than string but got %s', type(val))})
 end
 
 ---Test that val is a table.
 function lunatest.assert_table(val, msg)
-    wraptest(
-        type(val) == 'table',
-        msg,
-        {
-            reason = fmt('Expected type table but got %s', type(val))
-        }
-    )
+    wraptest(type(val) == 'table', msg, {reason = fmt('Expected type table but got %s', type(val))})
 end
 
 ---Test that val is not a table.
 function lunatest.assert_not_table(val, msg)
-    wraptest(
-        type(val) ~= 'table',
-        msg,
-        {
-            reason = fmt('Expected type other than table but got %s', type(val))
-        }
-    )
+    wraptest(type(val) ~= 'table', msg, {reason = fmt('Expected type other than table but got %s', type(val))})
 end
 
 ---Test that val is a function.
 function lunatest.assert_function(val, msg)
-    wraptest(
-        type(val) == 'function',
-        msg,
-        {
-            reason = fmt('Expected type function but got %s', type(val))
-        }
-    )
+    wraptest(type(val) == 'function', msg, {reason = fmt('Expected type function but got %s', type(val))})
 end
 
 ---Test that val is not a function.
 function lunatest.assert_not_function(val, msg)
-    wraptest(
-        type(val) ~= 'function',
-        msg,
-        {
-            reason = fmt('Expected type other than function but got %s', type(val))
-        }
-    )
+    wraptest(type(val) ~= 'function', msg, {reason = fmt('Expected type other than function but got %s', type(val))})
 end
 
 ---Test that val is a thread (coroutine).
 function lunatest.assert_thread(val, msg)
-    wraptest(
-        type(val) == 'thread',
-        msg,
-        {
-            reason = fmt('Expected type thread but got %s', type(val))
-        }
-    )
+    wraptest(type(val) == 'thread', msg, {reason = fmt('Expected type thread but got %s', type(val))})
 end
 
 ---Test that val is not a thread (coroutine).
 function lunatest.assert_not_thread(val, msg)
-    wraptest(
-        type(val) ~= 'thread',
-        msg,
-        {
-            reason = fmt('Expected type other than thread but got %s', type(val))
-        }
-    )
+    wraptest(type(val) ~= 'thread', msg, {reason = fmt('Expected type other than thread but got %s', type(val))})
 end
 
 ---Test that val is a userdata (light or heavy).
 function lunatest.assert_userdata(val, msg)
-    wraptest(
-        type(val) == 'userdata',
-        msg,
-        {
-            reason = fmt('Expected type userdata but got %s', type(val))
-        }
-    )
+    wraptest(type(val) == 'userdata', msg, {reason = fmt('Expected type userdata but got %s', type(val))})
 end
 
 ---Test that val is not a userdata (light or heavy).
 function lunatest.assert_not_userdata(val, msg)
-    wraptest(
-        type(val) ~= 'userdata',
-        msg,
-        {
-            reason = fmt('Expected type other than userdata but got %s', type(val))
-        }
-    )
+    wraptest(type(val) ~= 'userdata', msg, {reason = fmt('Expected type other than userdata but got %s', type(val))})
 end
 
 ---Test that a value has the expected metatable.
 function lunatest.assert_metatable(exp, val, msg)
     local mt = getmetatable(val)
-    wraptest(
-        mt == exp,
-        msg,
-        {
-            reason = fmt('Expected metatable %s but got %s', TS(exp), TS(mt))
-        }
-    )
+    wraptest(mt == exp, msg, {reason = fmt('Expected metatable %s but got %s', TS(exp), TS(mt))})
 end
 
 ---Test that a value does not have a given metatable.
 function lunatest.assert_not_metatable(exp, val, msg)
     local mt = getmetatable(val)
-    wraptest(
-        mt ~= exp,
-        msg,
-        {
-            reason = fmt('Expected metatable other than %s', TS(exp))
-        }
-    )
+    wraptest(mt ~= exp, msg, {reason = fmt('Expected metatable other than %s', TS(exp))})
 end
 
 ---Test that the function raises an error when called.
 function lunatest.assert_error(f, msg)
     local ok, err = pcall(f)
     local got = ok or err
-    wraptest(
-        not ok,
-        msg,
-        {
-            exp = 'an error',
-            got = got,
-            reason = fmt('Expected an error, got %s', TS(got))
-        }
-    )
+    wraptest(not ok, msg, {exp = 'an error', got = got, reason = fmt('Expected an error, got %s', TS(got))})
 end
 
 -- #########
@@ -561,10 +420,8 @@ local function print_totals(r)
     end
     local elapsed = fmt(' in %.2f %s', el, unit)
     local buf = {
-        '\n---- Testing finished%s, ',
-        'with %d assertion(s) ----\n',
-        '  %d passed, %d failed, ',
-        '%d error(s), %d skipped.'
+        '\n---- Testing finished%s, ', 'with %d assertion(s) ----\n', '  %d passed, %d failed, ',
+        '%d error(s), %d skipped.',
     }
     printf(table.concat(buf), elapsed, checked, ps, fs, es, ss)
 end
@@ -587,7 +444,7 @@ default_hooks = {
                 printf('%s', res:tostring(name))
             end
         end
-    end
+    end,
 }
 
 ---Default verbose behavior.
@@ -615,7 +472,7 @@ verbose_hooks = {
     end,
     done = function(r)
         print_totals(r)
-    end
+    end,
 }
 
 setmetatable(verbose_hooks, {__index = default_hooks})
@@ -658,13 +515,10 @@ end
 -- interpreted in the same manner as require "modname".
 -- Which functions are tests is determined by is_test_key(name).
 function lunatest.suite(modname)
-    local ok, err =
-        pcall(
-        function()
-            local mod, r_err = require(modname)
-            table.insert(suites, {name = modname, tests = get_tests(mod)})
-        end
-    )
+    local ok, err = pcall(function()
+        local mod, r_err = require(modname)
+        table.insert(suites, {name = modname, tests = get_tests(mod)})
+    end)
     if not ok then
         print(fmt(' * Error loading test suite %q:\n%s', modname, tostring(err)))
         failed_suites[#failed_suites + 1] = modname
@@ -693,17 +547,13 @@ local function run_test(name, test, suite, hooks, setup, teardown)
     if is_func(hooks.pre_test) then
         hooks.pre_test(name)
     end
-    local t_pre, t_post, elapsed  --timestamps. requires luasocket.
+    local t_pre, t_post, elapsed -- timestamps. requires luasocket.
     local ok, err
 
     if is_func(setup) then
-        ok, err =
-            xpcall(
-            function()
-                setup(name)
-            end,
-            err_handler(name)
-        )
+        ok, err = xpcall(function()
+            setup(name)
+        end, err_handler(name))
     else
         ok = true
     end
@@ -716,25 +566,18 @@ local function run_test(name, test, suite, hooks, setup, teardown)
 
         if is_func(teardown) then
             if ok then
-                ok, err =
-                    xpcall(
-                    function()
-                        teardown(name, elapsed)
-                    end,
-                    err_handler(name)
-                )
+                ok, err = xpcall(function()
+                    teardown(name, elapsed)
+                end, err_handler(name))
             else
-                xpcall(
-                    function()
-                        teardown(name, elapsed)
-                    end,
-                    function(info)
-                        print '\n==============================================='
-                        local msg = fmt('ERROR in teardown handler: %s', info)
-                        print(msg)
-                        os.exit(1)
-                    end
-                )
+                xpcall(function()
+                    teardown(name, elapsed)
+                end, function(info)
+                    print '\n==============================================='
+                    local msg = fmt('ERROR in teardown handler: %s', info)
+                    print(msg)
+                    os.exit(1)
+                end)
             end
         end
     end
@@ -845,13 +688,13 @@ function lunatest.run(hooks, opts)
 
     setmetatable(hooks, {__index = default_hooks})
 
-    local results = result_table('main')
+    local results = result_table('src')
     results.t_pre = now()
 
     -- If it's all in one test file, check its environment, too.
     local env = getenv(3)
     if env then
-        local main_suite = {name = 'main', tests = get_tests(env)}
+        local main_suite = {name = 'src', tests = get_tests(env)}
         table.insert(suites, main_suite)
     end
 
@@ -928,7 +771,7 @@ local function determine_accuracy()
             return i - 1
         end
     end
-    return 128 --long long ints?
+    return 128 -- long long ints?
 end
 local bits_of_accuracy = determine_accuracy()
 
@@ -954,7 +797,7 @@ end
 
 -- Return a (() -> random char) iterator from a pattern.
 local function parse_pattern(pattern)
-    local cs = {} --charset
+    local cs = {} -- charset
     local idx = 1
     local len = string.len(pattern)
     assert(len > 0, 'Cannot generate pattern from empty string.')
@@ -971,8 +814,8 @@ local function parse_pattern(pattern)
 
         if c == '-' then
             if at_either_end() then
-                cs[#cs + 1] = c --literal - at start or end
-            else --range
+                cs[#cs + 1] = c -- literal - at start or end
+            else -- range
                 local low = string.byte(slice(idx - 1)) + 1
                 local high = string.byte(slice(idx + 1))
                 assert(low < high, 'Invalid character range: ' .. pattern)
@@ -1004,15 +847,11 @@ end
 -- Read a random string spec, return a config table.
 local function parse_randstring(s)
     local low, high, rest = string.match(s, '([0-9]+),?([0-9]*) (.*)')
-    if low then --any match
+    if low then -- any match
         if high == '' then
             high = low
         end
-        return {
-            low = tonumber(low),
-            high = tonumber(high),
-            gen = parse_pattern(rest)
-        }
+        return {low = tonumber(low), high = tonumber(high), gen = parse_pattern(rest)}
     else
         local err = 'Invalid random string spec: ' .. s
         error(err, 2)
@@ -1092,7 +931,7 @@ local random_test_defaults = {
     seed_limit = math.min(1e13, 2 ^ bits_of_accuracy),
     always = {},
     seed = nil,
-    show_progress = true
+    show_progress = true,
 }
 
 local function random_args(args)
@@ -1138,12 +977,9 @@ local function run_randtest(seed, f, args, r, limit)
 
     local result
     local r_args = random_args(args)
-    local ok, err =
-        pcall(
-        function()
-            f(unpack(r_args))
-        end
-    )
+    local ok, err = pcall(function()
+        f(unpack(r_args))
+    end)
     if ok then
         result = Pass()
         result.seed = seed
@@ -1183,20 +1019,16 @@ end
 local function report_trial(r, opt)
     if #r.es > 0 then
         local seeds = get_seeds_and_args(r.es)
-        error(
-            Fail {
-                reason = fmt('%d tests, %d error(s).\n   %s', r.ts, #r.es, table.concat(seeds, '\n   ')),
-                seeds = seeds
-            }
-        )
+        error(Fail {
+            reason = fmt('%d tests, %d error(s).\n   %s', r.ts, #r.es, table.concat(seeds, '\n   ')),
+            seeds = seeds,
+        })
     elseif #r.fs > 0 then
         local seeds = get_seeds_and_args(r.fs)
-        error(
-            Fail {
-                reason = fmt('%d tests, %d failure(s).\n   %s', r.ts, #r.fs, table.concat(seeds, '\n   ')),
-                seeds = seeds
-            }
-        )
+        error(Fail {
+            reason = fmt('%d tests, %d failure(s).\n   %s', r.ts, #r.fs, table.concat(seeds, '\n   ')),
+            seeds = seeds,
+        })
     elseif #r.ss >= opt.max_skips then
         error(Fail {reason = fmt('Too many cases skipped.')})
     else

@@ -2,7 +2,6 @@
 local UserEntity = class('UserEntity')
 
 function UserEntity:initialize(params)
-    --- @type UserEntityPlain
     self.data = {
         id = params.id,
         name = params.name,

@@ -15,7 +15,8 @@ function ThemeMap:initialize(ui_service, scenes_service, settings, scheme)
     self.is_common = settings.is_common
     self.extra_key = settings.extra_key
     self.scene_id = settings.scene_id or self.scenes_service:get_current_scene()
-    self.theme = self.is_common and self.ui_service:get_common_colors() or self.ui_service:get_scene_colors(self.scene_id)
+    self.theme = self.is_common and self.ui_service:get_common_colors() or
+                     self.ui_service:get_scene_colors(self.scene_id)
 
     assert(self.theme, 'no theme for ' .. self.scene_id)
 
@@ -25,8 +26,6 @@ function ThemeMap:initialize(ui_service, scenes_service, settings, scheme)
 
     self.scheme = scheme
     self.map = {}
-
-    -- print('initialize', self.scene_id)
 
     self:_fill_scheme()
     self.ui_service.event_theme_changed:add(self.on_event_theme_changed, self)
@@ -60,10 +59,7 @@ function ThemeMap:add(theme_object_key, item)
 
     assert(self.theme[colors_key], 'no colors for ' .. colors_key)
 
-    local params = {
-        primary_mode = item.primary_mode,
-        disable_submode = item.disable_submode
-    }
+    local params = {primary_mode = item.primary_mode, disable_submode = item.disable_submode}
     self.map[theme_object_key] = ThemeNodeType(item.map, self.theme[colors_key], params)
 end
 
@@ -76,9 +72,7 @@ function ThemeMap:add_to_list(list_key, theme_object_map, params)
             map[key] = NodesList(node)
         end
 
-        local theme_params = {
-            disable_submode = params.disable_submode
-        }
+        local theme_params = {disable_submode = params.disable_submode}
         self.map[list_key] = ThemeNodeType(map, self.theme[list_key], theme_params)
         return
     end
@@ -107,16 +101,15 @@ function ThemeMap:add_list(list_key, list_data)
         end
     end
 
-    local params = {
-        disable_submode = list_data.disable_submode
-    }
+    local params = {disable_submode = list_data.disable_submode}
     self.map[list_key] = ThemeNodeType(map, self.theme[list_key], params)
 
     self:refresh()
 end
 
 function ThemeMap:refresh()
-    self.theme = self.is_common and self.ui_service:get_common_colors() or self.ui_service:get_scene_colors(self.scene_id)
+    self.theme = self.is_common and self.ui_service:get_common_colors() or
+                     self.ui_service:get_scene_colors(self.scene_id)
 
     if self.extra_key then
         self.theme = self.theme[self.extra_key]
@@ -141,7 +134,6 @@ function ThemeMap:get_map()
 end
 
 function ThemeMap:final()
-    -- print('final', self.scene_id)
     self.ui_service.event_theme_changed:remove(self.refresh, self)
 end
 

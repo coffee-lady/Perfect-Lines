@@ -6,7 +6,7 @@ local ServerConfig = App.config.server[App.config.platform]
 --- @class OkPlatformService
 local OkPlatformService = class('OkPlatformService')
 
-OkPlatformService.__cparams = {'event_bus_gui'}
+OkPlatformService.__cparams = {'event_bus'}
 
 function OkPlatformService:initialize(event_bus)
     OKAPI.init(event_bus, ServerConfig)

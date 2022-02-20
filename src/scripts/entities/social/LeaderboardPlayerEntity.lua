@@ -2,7 +2,6 @@
 local LeaderboardPlayerEntity = class('LeaderboardPlayerEntity')
 
 function LeaderboardPlayerEntity:initialize(params)
-    --- @type LeaderboardPlayerEntityPlain
     self.data = {
         id = params.id,
         name = params.name,

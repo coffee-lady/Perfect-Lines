@@ -5,7 +5,7 @@ local ScriptWrapper = require('src.libs.script_wrapper.ScriptWrapper')
 --- @class MessagesSceneWrapper
 local MessagesSceneWrapper = class('MessagesSceneWrapper', ScriptWrapper)
 
-MessagesSceneWrapper.__cparams = {'event_bus_gui'}
+MessagesSceneWrapper.__cparams = {'event_bus'}
 
 function MessagesSceneWrapper:initialize(event_bus)
     self.event_bus = event_bus

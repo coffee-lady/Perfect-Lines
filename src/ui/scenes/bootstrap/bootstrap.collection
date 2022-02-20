@@ -70,7 +70,7 @@ embedded_instances {
 }
 embedded_instances {
   id: "screens"
-  children: "start_scene"
+  children: "game_scene"
   data: ""
   position {
     x: 0.0
@@ -90,7 +90,7 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "start_scene"
+  id: "game_scene"
   data: "components {\n"
   "  id: \"screen_proxy\"\n"
   "  component: \"/monarch/screen_proxy.script\"\n"
@@ -107,19 +107,19 @@ embedded_instances {
   "  }\n"
   "  properties {\n"
   "    id: \"screen_id\"\n"
-  "    value: \"start_scene\"\n"
+  "    value: \"game_scene\"\n"
   "    type: PROPERTY_TYPE_HASH\n"
   "  }\n"
   "  properties {\n"
   "    id: \"transition_url\"\n"
-  "    value: \"start_scene:/scene#gui\"\n"
+  "    value: \"game_scene:/scene#gui\"\n"
   "    type: PROPERTY_TYPE_URL\n"
   "  }\n"
   "}\n"
   "embedded_components {\n"
   "  id: \"collectionproxy\"\n"
   "  type: \"collectionproxy\"\n"
-  "  data: \"collection: \\\"/src/ui/scenes/start scene/start scene.collection\\\"\\n"
+  "  data: \"collection: \\\"/src/ui/scenes/game scene/game scene.collection\\\"\\n"
   "exclude: false\\n"
   "\"\n"
   "  position {\n"

@@ -38,11 +38,7 @@ end
 function Event:add(callback, caller)
     assert(callback, debug.traceback())
 
-    local cb_data = {
-        caller_script = ScriptInstance:get_instance(),
-        callback = callback,
-        caller = caller
-    }
+    local cb_data = {caller_script = ScriptInstance:get_instance(), callback = callback, caller = caller}
 
     self.callbacks:push(cb_data)
 
@@ -67,6 +63,12 @@ function Event:remove(callback)
     end
 
     return self
+end
+
+if _G then
+    _G.Event = function(...)
+        return inject(Event, ...)
+    end
 end
 
 return Event

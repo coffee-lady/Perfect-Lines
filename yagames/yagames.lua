@@ -13,7 +13,7 @@ local M = {
     leaderboards_ready = false,
     payments_ready = false,
     player_ready = false,
-    banner_ready = false
+    banner_ready = false,
 }
 
 local init_callback = nil
@@ -51,7 +51,6 @@ end
 -- @tparam function callback
 function M.init(callback)
     if not yagames_private then
-        print('YaGames is only available on the HTML5 platform. You will use the mocked version that is suitable only for testing.')
         mock.enable()
     end
 
@@ -101,16 +100,11 @@ function M.clipboard_write_text(text, callback)
     assert(M.ysdk_ready, 'YaGames is not initialized.')
     assert(type(text) == 'string', "Text should be 'string'")
 
-    yagames_private.clipboard_write_text(
-        helper.wrap_for_promise(
-            function(self, err)
-                if type(callback) == 'function' then
-                    callback(self, err)
-                end
-            end
-        ),
-        text
-    )
+    yagames_private.clipboard_write_text(helper.wrap_for_promise(function(self, err)
+        if type(callback) == 'function' then
+            callback(self, err)
+        end
+    end), text)
 end
 
 ---
@@ -159,16 +153,12 @@ function M.feedback_can_review(callback)
     assert(M.ysdk_ready, 'YaGames is not initialized.')
     assert(type(callback) == 'function', 'Callback function is required')
 
-    yagames_private.feedback_can_review(
-        helper.wrap_for_promise(
-            function(self, err, result)
-                if result then
-                    result = rxi_json.decode(result)
-                end
-                callback(self, err, result)
-            end
-        )
-    )
+    yagames_private.feedback_can_review(helper.wrap_for_promise(function(self, err, result)
+        if result then
+            result = rxi_json.decode(result)
+        end
+        callback(self, err, result)
+    end))
 end
 
 --- Find out if it is possible to request a feedback window for the game.
@@ -177,16 +167,12 @@ function M.feedback_request_review(callback)
     assert(M.ysdk_ready, 'YaGames is not initialized.')
     assert(type(callback) == 'function', 'Callback function is required')
 
-    yagames_private.feedback_request_review(
-        helper.wrap_for_promise(
-            function(self, err, result)
-                if result then
-                    result = rxi_json.decode(result)
-                end
-                callback(self, err, result)
-            end
-        )
-    )
+    yagames_private.feedback_request_review(helper.wrap_for_promise(function(self, err, result)
+        if result then
+            result = rxi_json.decode(result)
+        end
+        callback(self, err, result)
+    end))
 end
 
 --- Initialize the leaderboards subsystem
@@ -195,15 +181,11 @@ end
 function M.leaderboards_init(callback)
     assert(type(callback) == 'function', 'Callback function is required')
 
-    yagames_private.get_leaderboards(
-        helper.wrap_for_promise(
-            function(self, err)
-                M.leaderboards_ready = not err
+    yagames_private.get_leaderboards(helper.wrap_for_promise(function(self, err)
+        M.leaderboards_ready = not err
 
-                callback(self, err)
-            end
-        )
-    )
+        callback(self, err)
+    end))
 end
 
 --- Get a description of a competition table by name.
@@ -214,17 +196,12 @@ function M.leaderboards_get_description(leaderboard_name, callback)
     assert(type(leaderboard_name) == 'string', "Leaderboard name should be 'string'")
     assert(type(callback) == 'function', 'Callback function is required')
 
-    yagames_private.leaderboards_get_description(
-        helper.wrap_for_promise(
-            function(self, err, result)
-                if result then
-                    result = rxi_json.decode(result)
-                end
-                callback(self, err, result)
-            end
-        ),
-        leaderboard_name
-    )
+    yagames_private.leaderboards_get_description(helper.wrap_for_promise(function(self, err, result)
+        if result then
+            result = rxi_json.decode(result)
+        end
+        callback(self, err, result)
+    end), leaderboard_name)
 end
 
 --- Get a user's ranking.
@@ -237,18 +214,12 @@ function M.leaderboards_get_player_entry(leaderboard_name, options, callback)
     assert(type(options) == 'nil' or type(options) == 'table', "Options should be 'table'")
     assert(type(callback) == 'function', 'Callback function is required')
 
-    yagames_private.leaderboards_get_player_entry(
-        helper.wrap_for_promise(
-            function(self, err, result)
-                if result then
-                    result = rxi_json.decode(result)
-                end
-                callback(self, err, result)
-            end
-        ),
-        leaderboard_name,
-        rxi_json.encode(options or {})
-    )
+    yagames_private.leaderboards_get_player_entry(helper.wrap_for_promise(function(self, err, result)
+        if result then
+            result = rxi_json.decode(result)
+        end
+        callback(self, err, result)
+    end), leaderboard_name, rxi_json.encode(options or {}))
 end
 
 --- Get user rankings.
@@ -261,18 +232,12 @@ function M.leaderboards_get_entries(leaderboard_name, options, callback)
     assert(type(options) == 'nil' or type(options) == 'table', "Options should be 'table'")
     assert(type(callback) == 'function', 'Callback function is required')
 
-    yagames_private.leaderboards_get_entries(
-        helper.wrap_for_promise(
-            function(self, err, result)
-                if result then
-                    result = rxi_json.decode(result)
-                end
-                callback(self, err, result)
-            end
-        ),
-        leaderboard_name,
-        rxi_json.encode(options or {})
-    )
+    yagames_private.leaderboards_get_entries(helper.wrap_for_promise(function(self, err, result)
+        if result then
+            result = rxi_json.decode(result)
+        end
+        callback(self, err, result)
+    end), leaderboard_name, rxi_json.encode(options or {}))
 end
 
 --- Set a new score for a player.
@@ -286,7 +251,8 @@ function M.leaderboards_set_score(leaderboard_name, score, extra_data, callback)
     assert(type(score) == 'number', "Score should be 'number'")
     assert(type(extra_data) == 'nil' or type(extra_data) == 'string', "Extra data should be 'string'")
 
-    yagames_private.leaderboards_set_score(callback and helper.wrap_for_promise(callback) or 0, leaderboard_name, score, extra_data)
+    yagames_private.leaderboards_set_score(callback and helper.wrap_for_promise(callback) or 0, leaderboard_name, score,
+                                           extra_data)
 end
 
 --- Initialize the in-game purchases system.
@@ -295,16 +261,11 @@ end
 function M.payments_init(options, callback)
     assert(type(callback) == 'function')
 
-    yagames_private.get_payments(
-        helper.wrap_for_promise(
-            function(self, err)
-                M.payments_ready = not err
+    yagames_private.get_payments(helper.wrap_for_promise(function(self, err)
+        M.payments_ready = not err
 
-                callback(self, err)
-            end
-        ),
-        rxi_json.encode(options or {})
-    )
+        callback(self, err)
+    end), rxi_json.encode(options or {}))
 end
 
 --- Activate an in-game purchase.
@@ -316,17 +277,12 @@ function M.payments_purchase(options, callback)
     assert(type(callback) == 'function')
     assert(type(options.id) == 'string')
 
-    yagames_private.payments_purchase(
-        helper.wrap_for_promise(
-            function(self, err, purchase)
-                if purchase then
-                    purchase = rxi_json.decode(purchase)
-                end
-                callback(self, err, purchase)
-            end
-        ),
-        rxi_json.encode(options)
-    )
+    yagames_private.payments_purchase(helper.wrap_for_promise(function(self, err, purchase)
+        if purchase then
+            purchase = rxi_json.decode(purchase)
+        end
+        callback(self, err, purchase)
+    end), rxi_json.encode(options))
 end
 
 --- Find out what purchases a player already made.
@@ -335,16 +291,13 @@ function M.payments_get_purchases(callback)
     assert(M.payments_ready, 'Payments subsystem is not initialized.')
     assert(type(callback) == 'function')
 
-    yagames_private.payments_get_purchases(
-        helper.wrap_for_promise(
-            function(self, err, purchases)
-                if purchases then
-                    purchases = rxi_json.decode(purchases)
-                end
-                callback(self, err, purchases)
+    yagames_private.payments_get_purchases(helper.wrap_for_promise(
+                                               function(self, err, purchases)
+            if purchases then
+                purchases = rxi_json.decode(purchases)
             end
-        )
-    )
+            callback(self, err, purchases)
+        end))
 end
 
 --- Get a list of available purchases and their cost.
@@ -353,16 +306,12 @@ function M.payments_get_catalog(callback)
     assert(M.payments_ready, 'Payments subsystem is not initialized.')
     assert(type(callback) == 'function')
 
-    yagames_private.payments_get_catalog(
-        helper.wrap_for_promise(
-            function(self, err, catalog)
-                if catalog then
-                    catalog = rxi_json.decode(catalog)
-                end
-                callback(self, err, catalog)
-            end
-        )
-    )
+    yagames_private.payments_get_catalog(helper.wrap_for_promise(function(self, err, catalog)
+        if catalog then
+            catalog = rxi_json.decode(catalog)
+        end
+        callback(self, err, catalog)
+    end))
 end
 
 --- Consume an in-game purchase.
@@ -384,18 +333,13 @@ end
 function M.player_init(options, callback)
     assert(type(callback) == 'function')
 
-    yagames_private.get_player(
-        helper.wrap_for_promise(
-            function(self, err)
-                -- Possible errors: "FetchError: Unauthorized"
-                -- Possible errors: "TypeError: Failed to fetch"
-                M.player_ready = not err
+    yagames_private.get_player(helper.wrap_for_promise(function(self, err)
+        -- Possible errors: "FetchError: Unauthorized"
+        -- Possible errors: "TypeError: Failed to fetch"
+        M.player_ready = not err
 
-                callback(self, err)
-            end
-        ),
-        rxi_json.encode(options or {})
-    )
+        callback(self, err)
+    end), rxi_json.encode(options or {}))
 end
 
 --- DEPRECATED: Use player_get_unique_id()
@@ -411,16 +355,12 @@ end
 function M.player_get_ids_per_game(callback)
     assert(type(callback) == 'function')
 
-    yagames_private.player_get_ids_per_game(
-        helper.wrap_for_promise(
-            function(self, err, arr)
-                if arr then
-                    arr = rxi_json.decode(arr)
-                end
-                callback(self, err, arr)
-            end
-        )
-    )
+    yagames_private.player_get_ids_per_game(helper.wrap_for_promise(function(self, err, arr)
+        if arr then
+            arr = rxi_json.decode(arr)
+        end
+        callback(self, err, arr)
+    end))
 end
 
 --- Return the user's name.
@@ -469,17 +409,12 @@ function M.player_get_data(keys, callback)
     assert(M.player_ready, 'Player is not initialized.')
     assert(type(callback) == 'function')
 
-    yagames_private.player_get_data(
-        helper.wrap_for_promise(
-            function(self, err, result)
-                if result then
-                    result = rxi_json.decode(result)
-                end
-                callback(self, err, result)
-            end
-        ),
-        keys and rxi_json.encode(keys) or nil
-    )
+    yagames_private.player_get_data(helper.wrap_for_promise(function(self, err, result)
+        if result then
+            result = rxi_json.decode(result)
+        end
+        callback(self, err, result)
+    end), keys and rxi_json.encode(keys) or nil)
 end
 
 --- Save the user's numeric data. The maximum data size must not exceed 10 KB.
@@ -497,17 +432,12 @@ function M.player_increment_stats(increments, callback)
     assert(type(increments) == 'table')
     assert(type(callback) == 'function')
 
-    yagames_private.player_increment_stats(
-        helper.wrap_for_promise(
-            function(self, err, result)
-                if result then
-                    result = rxi_json.decode(result)
-                end
-                callback(self, err, result)
-            end
-        ),
-        rxi_json.encode(increments)
-    )
+    yagames_private.player_increment_stats(helper.wrap_for_promise(function(self, err, result)
+        if result then
+            result = rxi_json.decode(result)
+        end
+        callback(self, err, result)
+    end), rxi_json.encode(increments))
 end
 
 --- Asynchronously return the user's numeric data.
@@ -515,17 +445,12 @@ function M.player_get_stats(keys, callback)
     assert(M.player_ready, 'Player is not initialized.')
     assert(type(callback) == 'function')
 
-    yagames_private.player_get_stats(
-        helper.wrap_for_promise(
-            function(self, err, result)
-                if result then
-                    result = rxi_json.decode(result)
-                end
-                callback(self, err, result)
-            end
-        ),
-        keys and rxi_json.encode(keys) or nil
-    )
+    yagames_private.player_get_stats(helper.wrap_for_promise(function(self, err, result)
+        if result then
+            result = rxi_json.decode(result)
+        end
+        callback(self, err, result)
+    end), keys and rxi_json.encode(keys) or nil)
 end
 
 ---
@@ -541,15 +466,11 @@ end
 function M.screen_fullscreen_request(callback)
     assert(M.ysdk_ready, 'YaGames is not initialized.')
 
-    yagames_private.screen_fullscreen_request(
-        helper.wrap_for_promise(
-            function(self, err)
-                if type(callback) == 'function' then
-                    callback(self, err)
-                end
-            end
-        )
-    )
+    yagames_private.screen_fullscreen_request(helper.wrap_for_promise(function(self, err)
+        if type(callback) == 'function' then
+            callback(self, err)
+        end
+    end))
 end
 
 ---
@@ -557,32 +478,24 @@ end
 function M.screen_fullscreen_exit(callback)
     assert(M.ysdk_ready, 'YaGames is not initialized.')
 
-    yagames_private.screen_fullscreen_exit(
-        helper.wrap_for_promise(
-            function(self, err)
-                if type(callback) == 'function' then
-                    callback(self, err)
-                end
-            end
-        )
-    )
+    yagames_private.screen_fullscreen_exit(helper.wrap_for_promise(function(self, err)
+        if type(callback) == 'function' then
+            callback(self, err)
+        end
+    end))
 end
 
 -- @tparam function callback
 function M.banner_init(callback)
     assert(type(callback) == 'function')
 
-    yagames_private.banner_init(
-        helper.wrap_for_promise(
-            function(self, err)
-                if not err then
-                    M.banner_ready = true
-                end
+    yagames_private.banner_init(helper.wrap_for_promise(function(self, err)
+        if not err then
+            M.banner_ready = true
+        end
 
-                callback(self, err)
-            end
-        )
-    )
+        callback(self, err)
+    end))
 end
 
 function M.banner_create(rtb_id, options, callback)
@@ -590,20 +503,13 @@ function M.banner_create(rtb_id, options, callback)
     assert(type(rtb_id) == 'string')
     assert(type(options) == 'table')
 
-    yagames_private.banner_create(
-        rtb_id,
-        rxi_json.encode(options),
-        callback and
-            helper.wrap_for_promise(
-                function(self, err, data)
-                    if not err then
-                        data = rxi_json.decode(data)
-                    end
-                    callback(self, err, data)
-                end
-            ) or
-            0
-    )
+    yagames_private.banner_create(rtb_id, rxi_json.encode(options),
+                                  callback and helper.wrap_for_promise(function(self, err, data)
+        if not err then
+            data = rxi_json.decode(data)
+        end
+        callback(self, err, data)
+    end) or 0)
 end
 
 function M.banner_destroy(rtb_id)
@@ -617,19 +523,12 @@ function M.banner_refresh(rtb_id, callback)
     assert(M.banner_ready, 'Yandex Advertising Network SDK is not initialized.')
     assert(type(rtb_id) == 'string')
 
-    yagames_private.banner_refresh(
-        rtb_id,
-        callback and
-            helper.wrap_for_promise(
-                function(self, err, data)
-                    if not err then
-                        data = rxi_json.decode(data)
-                    end
-                    callback(self, err, data)
-                end
-            ) or
-            0
-    )
+    yagames_private.banner_refresh(rtb_id, callback and helper.wrap_for_promise(function(self, err, data)
+        if not err then
+            data = rxi_json.decode(data)
+        end
+        callback(self, err, data)
+    end) or 0)
 end
 
 function M.banner_set(rtb_id, property, value)

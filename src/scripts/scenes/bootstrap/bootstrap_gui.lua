@@ -9,9 +9,7 @@ local Luject = App.libs.luject
 
 local BootstrapGUI = class('BootstrapGUI')
 
-BootstrapGUI.__cparams = {
-    'event_bus_gui', 'scenes_service', 'screen_service', 'local_storage', 'show_first_scene_use_case',
-}
+BootstrapGUI.__cparams = {'event_bus', 'scenes_service', 'screen_service', 'local_storage', 'show_first_scene_use_case'}
 
 function BootstrapGUI:initialize(event_bus, scenes_service, screen_service, local_storage, show_first_scene_use_case)
     self.event_bus = event_bus

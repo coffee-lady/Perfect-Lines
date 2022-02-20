@@ -9,7 +9,7 @@ local DEBUG = App.config.debug_mode.PlatformService
 --- @class PlatformService
 local PlatformService = class('PlatformService')
 
-PlatformService.__cparams = {'event_bus_gui'}
+PlatformService.__cparams = {'event_bus'}
 
 PlatformService.SYSTEM = {
     DARWIN = 'Darwin',
@@ -17,7 +17,7 @@ PlatformService.SYSTEM = {
     WINDOWS = 'Windows',
     WEB = 'HTML5',
     ANDROID = 'Android',
-    IOS = 'iPhone OS'
+    IOS = 'iPhone OS',
 }
 
 function PlatformService:initialize(event_bus)
@@ -29,7 +29,7 @@ function PlatformService:initialize(event_bus)
     self.data = {
         app_title = sys.get_config('project.title'),
         app_version = sys.get_config('project.version'),
-        system_name = sys.get_sys_info().system_name
+        system_name = sys.get_sys_info().system_name,
     }
 
     self:_log_info()
@@ -48,19 +48,17 @@ function PlatformService:_log_info()
     local connect_static_test_config = Config.connect_static_test_config
     local connect_local_test_config = Config.connect_local_test_config
 
-    self.debug:log_html_dump(
-        {
-            version = sys.get_config('project.version'),
-            platform = Config.platform,
-            high_dpi = sys.get_config('display.high_dpi'),
-            verify_graphics_calls = sys.get_config('graphics.verify_graphics_calls'),
-            is_connected_only_local_config = not connect_static_config and not connect_static_test_config,
-            is_test_local_config = connect_local_test_config,
-            is_prod_local_config = not connect_local_test_config,
-            is_test_static_config = connect_static_test_config,
-            is_prod_static_config = connect_static_config
-        }
-    )
+    self.debug:log_html_dump({
+        version = sys.get_config('project.version'),
+        platform = Config.platform,
+        high_dpi = sys.get_config('display.high_dpi'),
+        verify_graphics_calls = sys.get_config('graphics.verify_graphics_calls'),
+        is_connected_only_local_config = not connect_static_config and not connect_static_test_config,
+        is_test_local_config = connect_local_test_config,
+        is_prod_local_config = not connect_local_test_config,
+        is_test_static_config = connect_static_test_config,
+        is_prod_static_config = connect_static_config,
+    })
 end
 
 function PlatformService:get_app_title()

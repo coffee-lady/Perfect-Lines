@@ -3,7 +3,7 @@
         "scope": "lua",
         "prefix": "app",
         "body": [
-            "local App = require('main.app')\n"
+            "local App = require('src.app')\n"
         ]
     },
     "Require game ID": {
@@ -44,7 +44,7 @@
         "scope": "lua",
         "prefix": "class",
         "body": [
-            "local App = require('main.app')",
+            "local App = require('src.app')",
             "local class = App.libs.middleclass\n",
             "--- @class Class",
             "local Class = class('Class')\n",

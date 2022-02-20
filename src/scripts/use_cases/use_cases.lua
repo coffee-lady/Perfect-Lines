@@ -3,9 +3,8 @@ local UseCases = {
     Game = require('src.scripts.use_cases.game.game_use_cases'),
     Ads = require('src.scripts.use_cases.ads.ads_use_cases'),
     Leaderboards = require('src.scripts.use_cases.leaderboards.LeaderboardsUseCases'),
-    PaymentsUseCases = require('src.scripts.use_cases.payments.PaymentsUseCases'),
     DataStorage = require('src.scripts.use_cases.data_storage.DataStorageUseCases'),
-    Feedback = require('src.scripts.use_cases.feedback.FeedbackUseCases')
+    Feedback = require('src.scripts.use_cases.feedback.FeedbackUseCases'),
 }
 
 return UseCases

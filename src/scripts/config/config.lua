@@ -1,41 +1,43 @@
-local TestConfigs = require('src.scripts.config.test.config')
-local ReleaseConfigs = require('src.scripts.config.release.config')
-local CommonConfig = require('src.scripts.config.common.common_config')
-local ConfigSettings = require('src.scripts.config.common.config_settings')
+local Config = {
+    dummy_data = require('src.scripts.config.dummy_data.dummy_data'),
+    localization = require('src.scripts.config.core.LocalizationConfig'),
+    game = require('src.scripts.config.game.GameConfig'),
+    bundle = require('src.scripts.config.bundle.bundle_config'),
+    data_storage = require('src.scripts.config.core.DataStorageConfig'),
+    ads = require('src.scripts.config.business.AdsConfig'),
+    leaderboards = require('src.scripts.config.game.LeaderboardsConfig'),
 
-if ConfigSettings.IS_RELEASE_BUILD then
-    ConfigSettings.CONNECT_STATIC_CONFIG = true
-    ConfigSettings.CONNECT_STATIC_TEST_CONFIG = false
-    ConfigSettings.CONNECT_LOCAL_TEST_CONFIG = false
-end
+    debug_mode = {
+        PlatformService = false,
+        AuthService = false,
+        StoreService = false,
+        PlayerDataStorage = false,
+        RewardedAdsService = true,
+        RewardedAdsAlgorithm = true,
+        InterstitialAdsService = true,
+        BannerAdsService = false,
+        SoundService = false,
+        NakamaAdapter = false,
+        LeaderboardsService = false,
+        HintsService = false,
+        FeedbackService = false,
+        FeedbackLocalVersion = false,
+        Feeds = false,
+    },
 
-CommonConfig.connect_static_config = ConfigSettings.CONNECT_STATIC_CONFIG
-CommonConfig.connect_static_test_config = ConfigSettings.CONNECT_STATIC_TEST_CONFIG
-CommonConfig.connect_local_test_config = ConfigSettings.CONNECT_LOCAL_TEST_CONFIG
-CommonConfig.is_release_version = ConfigSettings.IS_RELEASE_BUILD
+    platforms = {yandex = 'yandex', ok = 'ok'},
 
-local ReleaseConfig = ReleaseConfigs[CommonConfig.platform]
-local TestConfig = TestConfigs[CommonConfig.platform]
+    platform = 'yandex',
 
-for key, value in pairs(CommonConfig) do
-    TestConfig[key] = value
-    ReleaseConfig[key] = value
-end
+    ui = {
+        default_theme = 'coffee',
+        available_themes = {{key = 'coffee', color = 'FBFAFF'}},
+        themes = require('src.scripts.config.core.themes.themes'),
+    },
 
-if ConfigSettings.IS_RELEASE_BUILD then
-    for key, _ in pairs(ReleaseConfig.debug_mode) do
-        ReleaseConfig.debug_mode[key] = false
-    end
+    resources = {localization = '/resources/localization/%s.json', levels = '/resources/levels/%s.json'},
 
-    for _, bundle_config in pairs(ReleaseConfig.bundle.platforms_config) do
-        bundle_config.debug = false
-    end
+    render_order = {game_scene = 1},
+}
 
-    return ReleaseConfig
-end
-
-if ConfigSettings.CONNECT_LOCAL_TEST_CONFIG then
-    return TestConfig
-end
-
-return ReleaseConfig
+return Config
