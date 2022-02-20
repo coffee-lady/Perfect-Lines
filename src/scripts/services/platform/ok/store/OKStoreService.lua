@@ -68,7 +68,6 @@ function OKStoreService:get_catalog()
     return self.shop_catalog
 end
 
---- @param product PurchasePackProductModel
 function OKStoreService:purchase_async(product)
     if not self.auth_service:is_authorized() then
         return nil, 'Error: not authorized'

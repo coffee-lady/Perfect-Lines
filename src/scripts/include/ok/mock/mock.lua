@@ -1,12 +1,9 @@
---- @type MockOKGameSDK
 local Mock = {}
 
 local DUMMY = {}
 Mock.DELAY_TIMEOUT = 0
 
-Mock.result_init = {
-    status = true,
-}
+Mock.result_init = {status = true}
 
 Mock.result_current_player = {
     status = true,
@@ -14,21 +11,14 @@ Mock.result_current_player = {
         first_name = 'MOCK',
         last_name = 'USER',
         locale = 'ru',
-        location = {
-            city = 'Минск',
-            country = 'BELARUS',
-            countryCode = 'BY',
-            countryName = 'Беларусь',
-        },
+        location = {city = 'Минск', country = 'BELARUS', countryCode = 'BY', countryName = 'Беларусь'},
         pic128x128 = 'https://i.mycdn.me/image?id=915381793412&t=34&plc=API&ts=000000016e000003b1&aid=512000881570&tkn=*tfG-olWnjDtSqKNA4gnFNks8O6U',
         -- pic128x128 = 'https://api.ok.ru/img/stub/user/female/128.png',
         uid = '562041079428',
     },
 }
 
-Mock.result_payment = {
-    status = true,
-}
+Mock.result_payment = {status = true}
 
 local function delay_call(func, ...)
     if not func then

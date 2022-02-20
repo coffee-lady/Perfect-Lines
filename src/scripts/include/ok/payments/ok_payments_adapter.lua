@@ -1,5 +1,4 @@
 local App = require('src.app')
---- @type OKGamesSDK
 local OKGames = require('OKGames.okgames')
 local NakamaAdapter = require('src.scripts.include.nakama.nakama')
 
@@ -17,12 +16,7 @@ end
 
 -- return success, error
 function OKPaymentsAdapter:purchase_async(id, title, price)
-    local result = OKGames:show_payments_async({
-        name = title,
-        description = '',
-        code = id,
-        price = price,
-    })
+    local result = OKGames:show_payments_async({name = title, description = '', code = id, price = price})
 
     debug_logger:log('purchased', id, debug_logger:inspect(result))
 
@@ -30,9 +24,7 @@ function OKPaymentsAdapter:purchase_async(id, title, price)
 end
 
 function OKPaymentsAdapter:sync_wallet_events_async(wallet)
-    return NakamaAdapter:sync_wallet_events({
-        wallet_items = wallet,
-    })
+    return NakamaAdapter:sync_wallet_events({wallet_items = wallet})
 end
 
 function OKPaymentsAdapter:get_wallet_async()
@@ -79,12 +71,7 @@ function OKPaymentsAdapter:_process_catalog(catalog)
             items[item.key] = item.amount
         end
 
-        result[i] = {
-            id = data.id,
-            type = data.sales_type,
-            price = tonumber(data.price),
-            items = items,
-        }
+        result[i] = {id = data.id, type = data.sales_type, price = tonumber(data.price), items = items}
     end
 
     return result

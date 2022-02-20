@@ -114,7 +114,6 @@ function TextFormatter._try_add_word_without_split(text_data, word, word_len)
     return false
 end
 
---- @param text_data TextData
 function TextFormatter._add_long_word_to_text_data(text_data, word, word_len)
     local start_index = 1
     while start_index <= word_len do

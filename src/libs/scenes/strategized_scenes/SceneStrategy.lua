@@ -3,7 +3,6 @@ local GUI = require('gui.gui')
 --- @class SceneStrategy
 local SceneStrategy = class('SceneStrategy')
 
---- @param view SceneView
 function SceneStrategy:initialize(Controllers, Presenters, View, UIMaps)
     --- @type SceneController[]
     self.controllers = {}

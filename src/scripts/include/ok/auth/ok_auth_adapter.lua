@@ -1,4 +1,3 @@
---- @type OKGamesSDK
 local OKGames = require('OKGames.okgames')
 local App = require('src.app')
 local NakamaAdapter = require('src.scripts.include.nakama.nakama')
@@ -14,11 +13,7 @@ local MAX_USERNAME_LENGTH = 17
 
 local AuthAdapter = {}
 
-AuthAdapter.IMAGE_SIZE = {
-    small = 'small',
-    medium = 'medium',
-    large = 'large',
-}
+AuthAdapter.IMAGE_SIZE = {small = 'small', medium = 'medium', large = 'large'}
 
 function AuthAdapter:init()
     local player_info = OKGames:get_current_player_info_async()

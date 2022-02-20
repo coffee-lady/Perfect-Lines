@@ -1,4 +1,3 @@
---- @type OKGamesSDK
 local OKGames = require('OKGames.okgames')
 local App = require('src.app')
 

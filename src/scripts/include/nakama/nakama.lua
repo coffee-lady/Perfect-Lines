@@ -5,7 +5,6 @@ local JSON = App.libs.json
 local Debug = App.libs.debug
 
 --- @class ServiceNakamaServer
---- @param config NakamaConfigService
 local NakamaAPI = {}
 
 local DataStorageConfig = App.config.data_storage
@@ -16,7 +15,6 @@ local CODE_ERROR_NAME_IN_USE = 6
 
 NakamaAPI.__cparams = {'config_server', 'key_storage_server'}
 
---- @param server_config NakamaConfigService
 function NakamaAPI:init(nakama, engine_defold, server_config, local_storage)
     self.config = assert(server_config)
     self.nakama = nakama
@@ -40,9 +38,7 @@ function NakamaAPI:authorize_id_async(user_id, username)
         return true
     end
 
-    local auth_data = {
-        custom_id = user_id,
-    }
+    local auth_data = {custom_id = user_id}
 
     local body_api_custom = self.nakama.create_api_account_custom(user_id)
     local result = self.nakama.authenticate_custom(self.client, body_api_custom, true, username)
@@ -153,10 +149,6 @@ function NakamaAPI:get_user_wallet_async()
     return wallet
 end
 
-function NakamaAPI:get_user_id()
-    return self.user_id
-end
-
 function NakamaAPI:is_authorized()
     return self.client and self.client.config.bearer_token ~= nil and self:_is_valid_auth_data()
 end
@@ -184,7 +176,6 @@ function NakamaAPI:get_catalog_async()
     return parse_result
 end
 
---- @param config NakamaConfigClient
 function NakamaAPI:_init_client(config, engine_defold)
     config = {
         host = config.host,

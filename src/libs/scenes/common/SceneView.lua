@@ -25,6 +25,12 @@ function SceneView:initialize(UIMaps)
     self.controls_map = safe_resolve(UIMaps.ControlsMap)
 end
 
+function SceneView:update(...)
+end
+
+function SceneView:on_input(...)
+end
+
 function SceneView:final()
     call_safe(self.theme_map.final, self.theme_map)
     call_safe(self.localization_map.final, self.localization_map)

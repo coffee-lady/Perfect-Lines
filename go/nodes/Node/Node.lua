@@ -1,5 +1,4 @@
 --- @class GONode
---- @field id hash
 local Node = class('Node')
 
 function Node:initialize(id, node_component)

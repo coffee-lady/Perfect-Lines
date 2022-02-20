@@ -19,11 +19,11 @@ end
 --- @class StandardScene
 local StandardScene = class('Scene', MessagesSceneWrapper)
 
---- @param view SceneView
 function StandardScene:initialize(event_bus, Controllers, Presenters, View, UIMaps, render_order)
     MessagesSceneWrapper.initialize(self, event_bus)
 
-    self.Controllers, self.Presenters, self.View, self.UIMaps, self.render_order = Controllers, Presenters, View, UIMaps, render_order
+    self.Controllers, self.Presenters, self.View, self.UIMaps, self.render_order = Controllers, Presenters, View,
+                                                                                   UIMaps, render_order
 
     --- @type SceneController[]
     self.controllers = {}

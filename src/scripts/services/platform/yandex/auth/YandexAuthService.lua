@@ -34,21 +34,13 @@ function YandexAuthService:authenticate()
     local cb_success_auth = function()
         self:_set_current_user_data()
 
-        self.event_auth_attempt:emit(
-            {
-                success = true
-            }
-        )
+        self.event_auth_attempt:emit({success = true})
 
         self.event_auth_success:emit()
     end
 
     local cb_auth_fail = function()
-        self.event_auth_attempt:emit(
-            {
-                success = false
-            }
-        )
+        self.event_auth_attempt:emit({success = false})
     end
 
     self.yandex_auth:authenticate(cb_success_auth, cb_auth_fail)
@@ -56,23 +48,19 @@ end
 
 function YandexAuthService:_set_current_user_data()
     local photo, photo_url = self.yandex_auth:get_current_user_photo_async(IMAGES_URL)
-    self.user =
-        UserEntity(
-        {
-            id = self.yandex_auth:get_user_id(),
-            name = self.yandex_auth:get_user_name(),
-            photo = photo,
-            photo_url = photo_url,
-            lang = self.yandex_auth:get_environment().i18n.lang
-        }
-    )
+    self.user = UserEntity({
+        id = self.yandex_auth:get_user_id(),
+        name = self.yandex_auth:get_user_name(),
+        photo = photo,
+        photo_url = photo_url,
+        lang = self.yandex_auth:get_environment().i18n.lang,
+    })
 end
 
 function YandexAuthService:is_authorized()
     return self.yandex_auth:is_authorized()
 end
 
---- @return UserEntityPlain
 function YandexAuthService:get_user()
     return self.user and self.user:get_plain_data() or nil
 end

@@ -1,5 +1,4 @@
 local App = require('src.app')
---- @type OKGamesSDK
 local OKGames = require('OKGames.okgames')
 local nakama = require('nakama.nakama')
 local engine_defold = require('nakama.engine.defold')
@@ -38,10 +37,7 @@ function OKAPI.on_resize()
 
         local page_info = result.data
 
-        OKGames:set_window_size({
-            width = page_info.clientWidth,
-            height = page_info.clientHeight - page_info.offsetTop,
-        })
+        OKGames:set_window_size({width = page_info.clientWidth, height = page_info.clientHeight - page_info.offsetTop})
     end)
 end
 

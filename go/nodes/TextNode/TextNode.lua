@@ -3,13 +3,8 @@ local AnimatableNode = require('go.nodes.AnimatableNode.AnimatableNode')
 --- @class TextNode : AnimatableNode
 local TextNode = class('TextNode', AnimatableNode)
 
-function TextNode:initialize(id, node_component)
-    AnimatableNode.initialize(self, id, node_component or 'text')
-end
-
-function TextNode:set_text(text)
-    gui.set_text(self.id, text)
-    return self
+function TextNode:initialize(id)
+    AnimatableNode.initialize(self, id)
 end
 
 function TextNode:set_text(text)

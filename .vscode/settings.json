@@ -114,7 +114,8 @@
         "collectionfactory",
         "jstodef",
         "image",
-        "collectionproxy"
+        "collectionproxy",
+        "label"
     ],
     "Lua.diagnostics.disable": [
         "lowercase-global",

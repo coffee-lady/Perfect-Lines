@@ -1,17 +1,11 @@
 local App = require('src.app')
 
-local AutosaveTimeoutTimer = App.libs.AutosaveTimeoutTimer
-
-local DataStorageConfig = App.config.data_storage
-local FILE = DataStorageConfig.file
-local KEY_TIMER = DataStorageConfig.keys.purchase_item_offer_timer
 local LKEY_STORE_GOODS = App.config.localization.keys.store_goods
 local PaymentsConfig = App.config.payments
 local Products = PaymentsConfig.products
 
 local OK_CURRENCY_CODE = 'OK'
 
---- @type PurchaseProductModel
 local OkPurchaseProductModel = class('OkPurchaseProductModel')
 
 function OkPurchaseProductModel:initialize(services, purchase_data)
